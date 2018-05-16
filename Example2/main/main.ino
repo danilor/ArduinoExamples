@@ -37,6 +37,7 @@ void setup() {
   pinMode(  pinLed1    ,   OUTPUT    );
   pinMode(  pinLed2    ,   OUTPUT    );
   pinMode(  buttonPin  ,   INPUT_PULLUP     );
+  printScoreboard();
 
 }
 
@@ -46,9 +47,8 @@ void setup() {
 */
 void loop() {
   PIRSensor();
-
-
-  buttonState = digitalRead(buttonPin);
+  buttonRead();
+  /*buttonState = digitalRead(buttonPin);
 
   // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
   if (buttonState == HIGH) {
@@ -57,22 +57,46 @@ void loop() {
   } else {
     // turn LED off:
     Serial.println( "Low" );
+  }*/
+}
+
+void buttonRead(){
+  int sensorVal = digitalRead( buttonPin );
+  // Serial.println( sensorVal );
+  if (sensorVal == LOW) {
+    // Resseting the counter
+    Serial.println( "Resseting the game" );
+    counter1 = 0;
+    counter2 = 0;
+    printScoreboard();
   }
 }
 
-
+void printScoreboard(){
+  Serial.println("");
+  Serial.println("");
+  Serial.println("            SCOREBOARD               ");
+  Serial.println("|===================================|");
+  Serial.println("|  TEAM A                   TEAM B  |");
+  Serial.print("     ");
+  Serial.print( counter1 );
+  Serial.print("                        ");
+  Serial.print( counter2 );
+  Serial.println("");
+  Serial.println("|===================================|");
+  Serial.println("");
+  Serial.println("");
+}
 
 void increaseCounter1( int i ) {
   counter1 += i;
-  Serial.println( "Current Counter: " );
-  Serial.println( counter1 );
+  printScoreboard();
   BuzzSound();
 }
 
 void increaseCounter2( int i ) {
   counter2 += i;
-  Serial.println( "Current Counter 2: " );
-  Serial.println( counter2 );
+  printScoreboard();
   BuzzSound();
 }
 
@@ -80,6 +104,7 @@ void BuzzSound() {
   /*
      const int tonos[] = {261, 277, 294, 311, 330, 349, 370, 392, 415, 440, 466, 494};
   */
+  return;
 
   const int tones[] = { 261 , 230 , 415 };
   const int sze = sizeof( tones ) / sizeof( tones[0] ) ;
@@ -127,7 +152,7 @@ void IRSensor1() {
 void IRSensor2() {
   if (digitalRead( pirPin2 ) == HIGH ) {
     if ( reading2 == false ) {
-      Serial.println( "Starting reading sensor 2" );
+      // Serial.println( "Starting reading sensor 2" );
       digitalWrite( pinLed2 , HIGH );
 
       increaseCounter2( 1 );
@@ -139,7 +164,7 @@ void IRSensor2() {
       reading2 = false;
       digitalWrite( pinLed2 , LOW );
 
-      Serial.println( "Stopping Counting sensor 2" );
+      // Serial.println( "Stopping Counting sensor 2" );
     }
   }
 }
