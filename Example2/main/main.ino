@@ -38,8 +38,12 @@ void setup() {
   pinMode(  pinLed2    ,   OUTPUT    );
   pinMode(  buttonPin  ,   INPUT_PULLUP     );
   printScoreboard();
-
 }
+
+void sendScoreToSerial(){
+  Serial.println("{  \"action\": \"score\",  \"origin\": \"arduino\",  \"data\":{    \"counterA\" : " + String(counter1) + ",    \"counterB\" : " + String(counter2) + "  }}");
+}
+
 
 
 /**
@@ -86,6 +90,7 @@ void printScoreboard(){
   Serial.println("|===================================|");
   Serial.println("");
   Serial.println("");
+  sendScoreToSerial();
 }
 
 void increaseCounter1( int i ) {
@@ -104,7 +109,7 @@ void BuzzSound() {
   /*
      const int tonos[] = {261, 277, 294, 311, 330, 349, 370, 392, 415, 440, 466, 494};
   */
-  return;
+ /* return;*/
 
   const int tones[] = { 261 , 230 , 415 };
   const int sze = sizeof( tones ) / sizeof( tones[0] ) ;
